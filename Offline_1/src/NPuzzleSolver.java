@@ -10,6 +10,7 @@ import java.io.IOException;
  * It also displays the solution path.
  * It also displays the number of moves required to solve the problem.
  * It also displays the number of nodes in the solution path.
+ * @Author: Akib-1805086
  */
 public class NPuzzleSolver {
 

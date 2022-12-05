@@ -78,10 +78,10 @@ public class AStar_algo {
         writer.write("Solving the puzzle using " + heuristicFunction + " as heuristic function\n");
         // while the queue is not empty
         while (!queue.isEmpty()) {
-            // manually terminate after 100000 iterations
+            // manually terminate after 1 million iterations
             count++;
-            if (count > 100000) {
-                System.out.println("Terminated after 100000 iterations");
+            if (count > 1000000) {
+                System.out.println("Terminated after 1 million iterations");
                 return;
             }
             // remove the node with the lowest cost
@@ -140,17 +140,20 @@ public class AStar_algo {
 
         // make a single line string taking only the ith row of the child game boards
         // and write it to the file
-        for (int i = 0; i < childList.get(0).getSize(); i++) {
-            StringBuilder stringBuilder = new StringBuilder();
-            for (GameBoard child : childList) {
-                stringBuilder.append(child.getBoard()[i][0]);
-                for (int j = 1; j < child.getSize(); j++) {
-                    stringBuilder.append("\t").append(child.getBoard()[i][j]);
+        if (!childList.isEmpty()){
+            for (int i = 0; i < childList.get(0).getSize(); i++) {
+                StringBuilder stringBuilder = new StringBuilder();
+                for (GameBoard child : childList) {
+                    stringBuilder.append(child.getBoard()[i][0]);
+                    for (int j = 1; j < child.getSize(); j++) {
+                        stringBuilder.append("\t").append(child.getBoard()[i][j]);
+                    }
+                    stringBuilder.append("\t\t");
                 }
-                stringBuilder.append("\t\t");
+                writer.write(stringBuilder + "\n");
             }
-            writer.write(stringBuilder + "\n");
         }
+
 
         // the visited list after each of the removals
         // intermediate states of the game board

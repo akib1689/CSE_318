@@ -171,7 +171,11 @@ public class GameBoard {
     public void printBoard() {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                System.out.print(board[i][j] + "\t");
+                if (board[i][j] == 0) {
+                    System.out.print("*\t");
+                } else {
+                    System.out.print(board[i][j] + "\t");
+                }
             }
             System.out.println();
         }
