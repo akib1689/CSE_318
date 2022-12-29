@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+
+
 public class Main {
     public static final int MAX_value = Integer.MAX_VALUE >> 2;
     public static final int MIN_value = Integer.MIN_VALUE >> 2;
@@ -11,7 +13,7 @@ public class Main {
         //
         // 1. Read the input file.
         // 2. Create the game board.
-        String fileName = "data/d-09-01.txt";
+        String fileName = "data/d-10-01.txt";
         try(BufferedReader reader = new BufferedReader(new FileReader(fileName))){
             // 1st line the size of the board.
             String line = reader.readLine(); // Reads N=10;
@@ -34,9 +36,9 @@ public class Main {
                 }
             }
 
-            for (Variable_Heuristic heuristic: Variable_Heuristic.values()) {
+//            for (Variable_Heuristic heuristic: Variable_Heuristic.values()) {
                 GameBoard gameBoard = new GameBoard(board);
-                CSP_Solver csp_solver = new CSP_Solver(heuristic);
+                CSP_Solver csp_solver = new CSP_Solver(Variable_Heuristic.VAH4);
                 long startTime = System.nanoTime();
                 gameBoard = csp_solver.preprocessor(gameBoard);
 //            gameBoard.printBoardWithDomain();
@@ -45,7 +47,7 @@ public class Main {
                 long duration = (endTime - startTime);
                 if (gameBoard != null){
 //                    System.out.println("Solved with " + heuristic);
-                    System.out.println(heuristic + " => " + csp_solver.nodesExpanded + ", " + csp_solver.backtracks + ", " + duration / 1000.0);
+                    System.out.println(Variable_Heuristic.VAH4 + " => " + csp_solver.nodesExpanded + ", " + csp_solver.backtracks + ", " + duration / 1000.0);
 //                    System.out.println("number of nodes expanded: " + csp_solver.nodesExpanded);
 //                    System.out.println("number of backtracks: " + csp_solver.backtracks);
 //                    System.out.println("Assignment");
@@ -53,7 +55,7 @@ public class Main {
                 }else {
                     System.out.println("Not Solved");
                 }
-            }
+//            }
         }catch (IOException e){
             e.printStackTrace();
         }

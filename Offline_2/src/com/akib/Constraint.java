@@ -17,7 +17,7 @@ public class Constraint {
                 if (v != v2 &&
                         (v.getValue() != 0 && v2.getValue() != 0) &&
                         (v.getX() == v2.getX() || v.getY() == v2.getY()) &&
-                        v.getValue() == v2.getValue()){
+                        (v.getValue() == v2.getValue())){
                         return false;
                 }
             }
