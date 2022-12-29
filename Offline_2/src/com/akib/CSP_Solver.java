@@ -1,13 +1,17 @@
+package com.akib;
+
 import java.util.List;
 
 /**
  * This is the CSP solver class.
- * this has a Variable Heuristic.
+ * this has a com.akib.Variable Heuristic.
  * this also has a Value Heuristic. (here this is constant)
  * the solve method takes a game board (CSP problem) and solves it.
  */
 public class CSP_Solver {
     private final Variable_Heuristic variable_heuristic;
+    public int nodesExpanded = 0;
+    public   int backtracks = 0;
 
 
 
@@ -53,7 +57,6 @@ public class CSP_Solver {
 
 
 
-    // TODO: 12/26/22 implement the solve method.
     /**
      * This method solves the CSP problem.
      * @param gameBoard     the game board.
@@ -69,16 +72,41 @@ public class CSP_Solver {
             return gameBoard;
         }
         Variable variable = Variable_Order_Heuristic.getNextVariable(gameBoard.getVariables(), variable_heuristic);
-        while (variable != null && getNextValue(variable, gameBoard.getVariables()) != 0) {
-            variable.setValue(getNextValue(variable, gameBoard.getVariables()));
-            if (Constraint.holds(gameBoard.getVariables())) {
-                GameBoard solvedGameBoard = backTracking_search(gameBoard);
+        if (variable == null){
+            return null;
+        }
+        for (int value : variable.getDomain()) {
+            variable.setValue(value);
+            if (Constraint.holds(gameBoard.getVariables())){
+//                System.out.println("number of solved variables: " + gameBoard.getNumberOfSolvedVariables());
+                GameBoard result = backTracking_search(gameBoard);
+                backtracks++;
+                if (result != null){
+                    return result;
+                }
+
+            }
+            nodesExpanded++;
+            variable.setValue(0);
+        }
+        /*int temp = getNextValue(variable, gameBoard.getVariables());
+        while (temp != 0 && variable.getDomainSize() != 0) {
+            variable.setValue(temp);
+            if (com.akib.Constraint.holds(gameBoard.getVariables())) {
+                System.out.println("Selected variable: " );
+                variable.printVariable();
+
+                com.akib.GameBoard solvedGameBoard = backTracking_search(gameBoard);
                 if (solvedGameBoard != null) {
                     return solvedGameBoard;
                 }
             }
             variable.setValue(0);
-        }
+            variable.removeValueFromDomain(temp);
+            temp = getNextValue(variable, gameBoard.getVariables());
+
+        }*/
+
         return null;
     }
 
@@ -98,7 +126,8 @@ public class CSP_Solver {
             int temp = 0;                                   // the number of values that will be ruled out.
             int val = variable.getValueFromDomain(i);
             for (Variable item : variables) {
-                if (item.getValue() == 0) {
+                if (item.getValue() == 0 &&
+                        (variable.getX() == item.getX() || variable.getY() == item.getY())) {
                     if (item.isInDomain(val)) {
                         temp++;
                     }

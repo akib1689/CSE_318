@@ -1,4 +1,7 @@
+package com.akib;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -8,7 +11,7 @@ import java.util.List;
  * It has also access the constraints.
  */
 public class GameBoard {
-    private Variable[][] board;
+    private final Variable[][] board;
 
     /**
      * Constructor for the game board class.
@@ -25,49 +28,62 @@ public class GameBoard {
     }
 
 
-    /**
-     * This method returns the board.
-     * @return  the board.
-     */
+    // Getters and Setters.
     public Variable[][] getBoard() {
         return board;
     }
 
     /**
-     * Method to print the board.
+     * Method to print the board with domain.
+     */
+    public void printBoardWithDomain() {
+        for (Variable[] variables : board) {
+            for (int j = 0; j < board.length; j++) {
+                variables[j].printVariable();
+            }
+            System.out.println();
+        }
+    }
+    /**
+     * Method to print the board. only the values of the variables.
      */
     public void printBoard() {
-        for (int i = 0; i < board.length; i++) {
+        for (Variable[] variables : board) {
             for (int j = 0; j < board.length; j++) {
-                board[i][j].printVariable();
+                System.out.print(variables[j].getValue() + " ");
             }
             System.out.println();
         }
     }
 
-
     /**
      * This method checks if the assignment is complete.
      */
     public boolean isComplete() {
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board.length; j++) {
-                if (board[i][j].getValue() == 0) {
-                    return false;
-                }
-            }
-        }
-        return true;
+        return getNumberOfSolvedVariables() == board.length * board.length;
     }
 
     public List<Variable> getVariables(){
         List<Variable> variables = new ArrayList<>();
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board.length; j++) {
-                variables.add(board[i][j]);
-            }
+        for (Variable[] value : board) {
+            variables.addAll(Arrays.asList(value).subList(0, board.length));
         }
         return variables;
+    }
+
+    /**
+     * method to get the number of solved variables.
+     */
+    public int getNumberOfSolvedVariables() {
+        int count = 0;
+        for (Variable[] variables : board) {
+            for (int j = 0; j < board.length; j++) {
+                if (variables[j].getValue() != 0) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 
 }

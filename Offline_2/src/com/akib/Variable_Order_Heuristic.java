@@ -1,3 +1,6 @@
+package com.akib;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,6 +35,9 @@ public class Variable_Order_Heuristic {
     private static Variable VAH1(List<Variable> variables) {
         Variable minDomainVariable = variables.get(0);
         for (Variable variable : variables) {
+            if (variable.getValue() != 0){
+                continue;
+            }
             if (variable.getDomainSize() < minDomainVariable.getDomainSize()) {
                 minDomainVariable = variable;
             }
@@ -47,9 +53,15 @@ public class Variable_Order_Heuristic {
     private static Variable VAH2(List<Variable> variables) {
         Variable maxDegreeVariable = variables.get(0);
         // first count the number of unassigned variables. around the variable.
-        for (Variable v: variables){
-            if (v.getForwardDegree(variables) > maxDegreeVariable.getForwardDegree(variables)){
-                maxDegreeVariable = v;
+        for (Variable variable: variables){
+            if (variable.getValue() != 0){
+                continue;
+            }
+
+            int degree = variable.getForwardDegree(variables);
+            int maxDegree = maxDegreeVariable.getForwardDegree(variables);
+            if (degree > maxDegree){
+                maxDegreeVariable = variable;
             }
         }
         return maxDegreeVariable;
@@ -67,6 +79,9 @@ public class Variable_Order_Heuristic {
     private static Variable VAH3(List<Variable> variables) {
         Variable minDomainVariable = variables.get(0);
         for (Variable variable : variables) {
+            if (variable.getValue() != 0){
+                continue;
+            }
             if (variable.getDomainSize() < minDomainVariable.getDomainSize()) {
                 minDomainVariable = variable;
             }
@@ -74,6 +89,9 @@ public class Variable_Order_Heuristic {
         // if there are more than one variable with the least number of values in its domain.
         // then the variable with the maximum degree to unassigned variables is returned.
         for (Variable variable : variables) {
+            if (variable.getValue() != 0){
+                continue;
+            }
             if (variable.getDomainSize() == minDomainVariable.getDomainSize()) {
                 if (variable.getForwardDegree(variables) > minDomainVariable.getForwardDegree(variables)) {
                     minDomainVariable = variable;
@@ -89,7 +107,12 @@ public class Variable_Order_Heuristic {
     private static Variable VAH4(List<Variable> variables) {
         Variable minRatioVariable = variables.get(0);
         for (Variable variable : variables) {
-            if (variable.getDomainSize() / variable.getForwardDegree(variables) < minRatioVariable.getDomainSize() / minRatioVariable.getForwardDegree(variables)) {
+            if (variable.getValue() != 0){
+                continue;
+            }
+            double ratio = variable.getRatioOfDomainWithForwardDegree(variables);
+            double minRatio = minRatioVariable.getRatioOfDomainWithForwardDegree(variables);
+            if (ratio < minRatio) {
                 minRatioVariable = variable;
             }
         }
@@ -102,6 +125,14 @@ public class Variable_Order_Heuristic {
      * @return              a random variable.
      */
     private static Variable VAH5(List<Variable> variables) {
-        return variables.get((int) (Math.random() * variables.size()));
+        //make a list of unassigned variables.
+        List<Variable> unassignedVariables = new ArrayList<>();
+        for (Variable variable : variables) {
+            if (variable.getValue() == 0) {
+                unassignedVariables.add(variable);
+            }
+        }
+
+        return unassignedVariables.get((int) (Math.random() * unassignedVariables.size()));
     }
 }

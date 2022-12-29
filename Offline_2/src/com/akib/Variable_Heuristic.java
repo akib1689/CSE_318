@@ -1,3 +1,5 @@
+package com.akib;
+
 /**
  * The following heuristic is present in the problem
  * VAH1: The variable chosen is the one with the least number of values in its domain.

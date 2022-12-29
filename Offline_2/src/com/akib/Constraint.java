@@ -1,5 +1,5 @@
-import java.util.HashMap;
-import java.util.Hashtable;
+package com.akib;
+
 import java.util.List;
 
 /**
@@ -14,12 +14,11 @@ public class Constraint {
     public static boolean holds(List<Variable> scope) {
         for (Variable v: scope){
             for (Variable v2: scope){
-                if (v != v2){
-                    if (v.getX() == v2.getX() || v.getY() == v2.getY()){
-                        if (v.getValue() == v2.getValue()){
-                            return false;
-                        }
-                    }
+                if (v != v2 &&
+                        (v.getValue() != 0 && v2.getValue() != 0) &&
+                        (v.getX() == v2.getX() || v.getY() == v2.getY()) &&
+                        v.getValue() == v2.getValue()){
+                        return false;
                 }
             }
         }

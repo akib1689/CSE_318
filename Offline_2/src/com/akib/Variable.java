@@ -1,3 +1,5 @@
+package com.akib;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,18 +48,6 @@ public class Variable {
         }
     }
 
-    /**
-     * This method updates the value of the variable.
-     */
-    public void updateValue() {
-        this.value = this.domain.get(0);
-    }
-
-    /**
-     * This method updates the domain of the variable.
-     * @return
-     */
-
 
     // Getters and Setters.
     public int getX() {
@@ -74,7 +64,7 @@ public class Variable {
 
     public int getDomainSize() {
         if (value != 0){
-            return Integer.MAX_VALUE;
+            return Main.MAX_value;
         }
         return domain.size();
     }
@@ -88,13 +78,19 @@ public class Variable {
      */
     public int getForwardDegree(List<Variable> variables) {
         int degree = 0;
+        if (value != 0){
+            return Main.MIN_value;
+        }
         for (Variable v : variables) {
-            if (v != this) {
-                if (v.getX() == this.getX() || v.getY() == this.getY()) {
-                    if (v.getValue() == 0) {
-                        degree++;
-                    }
-                }
+            if (v==this){
+                continue;
+            }
+            if (v.getValue() != 0){
+                continue;
+            }
+
+            if (v.getX() == this.getX() || v.getY() == this.getY()) {
+                degree++;
             }
         }
         return degree;
@@ -128,16 +124,28 @@ public class Variable {
         return domain.get(index);
     }
 
+    public double getRatioOfDomainWithForwardDegree(List<Variable> variables){
+        if (value != 0){
+            return Main.MAX_value;
+        }
+        if (getForwardDegree(variables) == 0){
+            return Main.MAX_value >> 1;
+        }
+
+        return (double) getDomainSize() / getForwardDegree(variables);
+    }
+
 
     /**
      * method to print the variable. with its domain.
      */
     public void printVariable() {
-        System.out.print("Variable: (" + this.x + ", " + this.y + ")-> " + this.value + " -> ");
+        System.out.print(" Variable: (" + this.x + ", " + this.y + ")-> " + this.value + " -> ");
         System.out.println("Domain: " + this.domain);
     }
 
 
-
-
+    public List<Integer> getDomain() {
+        return domain;
+    }
 }
