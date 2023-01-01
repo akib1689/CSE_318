@@ -1,6 +1,8 @@
 package com.test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class Variable {
@@ -8,7 +10,11 @@ public class Variable {
 
     private int value;                      // The assigned value of the variable.
 
-    private final int [] domain;                  // The domain of the variable.
+    private int forwardDegree;              // The forward degree of the variable.
+                                            // how many unassigned variables are
+                                            // in the same row, column as this variable.
+
+    private final List<Integer> domain;     // The domain of the variable.
 
 
     /**
@@ -26,16 +32,37 @@ public class Variable {
         this.x = x;
         this.y = y;
         this.value = value;
+        this.forwardDegree = 2 * domainSize - 2;
 
         if (value != 0){
-            this.domain = new int[1];
-            this.domain[0] = value;
+            this.domain = new ArrayList<>();
             return;
         }
-        this.domain = new int[domainSize];
-        for (int i = 0; i < domainSize; i++) {
-            this.domain[i] = domainSize - i;
+        this.domain = new ArrayList<>();
+        for (int i = 1; i <= domainSize; i++) {
+            this.domain.add(i);
         }
+    }
+
+    public void removeValueFromDomain(int value){
+        for (int i = 0; i < domain.size(); i++) {
+            if (domain.get(i) == value){
+                domain.remove(i);
+                return;
+            }
+        }
+    }
+
+    public void addValueToDomain(int value){
+        this.domain.add(value);
+    }
+
+    public void decreaseForwardDegree(){
+        forwardDegree--;
+    }
+
+    public void increaseForwardDegree(){
+        forwardDegree++;
     }
 
 
@@ -60,7 +87,11 @@ public class Variable {
         this.value = value;
     }
 
-    public int[] domain() {
+    public void setDegree(int degree){
+        this.forwardDegree = degree;
+    }
+
+    public List<Integer> domain() {
         return domain;
     }
 
@@ -77,5 +108,9 @@ public class Variable {
     @Override
     public int hashCode() {
         return Objects.hash(x, y);
+    }
+
+    public int degree() {
+        return forwardDegree;
     }
 }
