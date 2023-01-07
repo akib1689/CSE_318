@@ -73,13 +73,12 @@ public class ForwardCheckSolver {
         for (int value : domain) {
             variable.setValue(value);
             HashSet <Variable> variables_to_remove = new HashSet<>();
-//            processVariable(csp, variable, variables_to_remove);
+            nodeCount++;
             if (processVariableWithForwardCheck(csp, variable, variables_to_remove)){
                 if (backtrack(csp)){
                     return true;
                 }
             }
-            nodeCount++;
             addVariableValueToDomain(csp, variable, variables_to_remove);
             variable.setValue(0);
         }
