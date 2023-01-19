@@ -1,60 +1,60 @@
 
-data/d-10-01.txt , Forward Check Solver , VAH1 , 287 , 214 , 8 ms 727 us 
+data/d-10-01.txt , Forward Check Solver , VAH1 , 69 , 10 , 1 ms 632 us 
 true
-data/d-10-01.txt , Forward Check Solver , VAH3 , 82 , 24 , 5 ms 797 us 
+data/d-10-01.txt , Forward Check Solver , VAH3 , 57 , 0 , 1 ms 629 us 
 true
-data/d-10-01.txt , Forward Check Solver , VAH4 , 81 , 20 , 5 ms 539 us 
+data/d-10-01.txt , Forward Check Solver , VAH4 , 60 , 1 , 1 ms 485 us 
 true
-data/d-10-01.txt , Forward Check Solver , VAH2 , 3352 , 2209 , 20 ms 605 us 
+data/d-10-01.txt , Forward Check Solver , VAH2 , 1228 , 768 , 7 ms 351 us 
 true
-data/d-10-01.txt , Forward Check Solver , VAH5 , 3024722 , 1713651 , 3 s 665 ms 
+data/d-10-01.txt , Forward Check Solver , VAH5 , 40156 , 22955 , 57 ms 141 us 
 true
-data/d-10-06.txt , Forward Check Solver , VAH1 , 749 , 635 , 11 ms 713 us 
+data/d-10-06.txt , Forward Check Solver , VAH1 , 606 , 495 , 6 ms 124 us 
 true
-data/d-10-06.txt , Forward Check Solver , VAH3 , 87 , 26 , 5 ms 741 us 
+data/d-10-06.txt , Forward Check Solver , VAH3 , 87 , 26 , 2 ms 347 us 
 true
-data/d-10-06.txt , Forward Check Solver , VAH4 , 98 , 35 , 5 ms 687 us 
+data/d-10-06.txt , Forward Check Solver , VAH4 , 99 , 34 , 2 ms 59 us 
 true
-data/d-10-06.txt , Forward Check Solver , VAH2 , 8793 , 6048 , 35 ms 617 us 
+data/d-10-06.txt , Forward Check Solver , VAH2 , 1275 , 799 , 7 ms 704 us 
 true
-data/d-10-06.txt , Forward Check Solver , VAH5 , 1990349 , 1127069 , 2 s 347 ms 
+data/d-10-06.txt , Forward Check Solver , VAH5 , 291707 , 165810 , 252 ms 104 us 
 true
-data/d-10-07.txt , Forward Check Solver , VAH1 , 212 , 145 , 7 ms 993 us 
+data/d-10-07.txt , Forward Check Solver , VAH1 , 673 , 559 , 6 ms 282 us 
 true
-data/d-10-07.txt , Forward Check Solver , VAH3 , 63 , 5 , 5 ms 34 us 
+data/d-10-07.txt , Forward Check Solver , VAH3 , 98 , 39 , 2 ms 666 us 
 true
-data/d-10-07.txt , Forward Check Solver , VAH4 , 57 , 0 , 4 ms 522 us 
+data/d-10-07.txt , Forward Check Solver , VAH4 , 140 , 73 , 2 ms 882 us 
 true
-data/d-10-07.txt , Forward Check Solver , VAH2 , 12906 , 8805 , 48 ms 366 us 
+data/d-10-07.txt , Forward Check Solver , VAH2 , 30727 , 21426 , 45 ms 740 us 
 true
-data/d-10-07.txt , Forward Check Solver , VAH5 , 462256 , 271749 , 602 ms 664 us 
+data/d-10-07.txt , Forward Check Solver , VAH5 , 1268961 , 734050 , 909 ms 673 us 
 true
-data/d-10-08.txt , Forward Check Solver , VAH1 , 158 , 94 , 7 ms 358 us 
+data/d-10-08.txt , Forward Check Solver , VAH1 , 130 , 56 , 2 ms 623 us 
 true
-data/d-10-08.txt , Forward Check Solver , VAH3 , 302 , 221 , 10 ms 62 us 
+data/d-10-08.txt , Forward Check Solver , VAH3 , 123 , 54 , 3 ms 837 us 
 true
-data/d-10-08.txt , Forward Check Solver , VAH4 , 272 , 186 , 10 ms 644 us 
+data/d-10-08.txt , Forward Check Solver , VAH4 , 244 , 158 , 4 ms 30 us 
 true
-data/d-10-08.txt , Forward Check Solver , VAH2 , 39889 , 27531 , 84 ms 983 us 
+data/d-10-08.txt , Forward Check Solver , VAH2 , 51339 , 35798 , 56 ms 915 us 
 true
-data/d-10-08.txt , Forward Check Solver , VAH5 , 98326 , 56726 , 176 ms 693 us 
+data/d-10-08.txt , Forward Check Solver , VAH5 , 91911 , 52100 , 102 ms 106 us 
 true
-data/d-10-09.txt , Forward Check Solver , VAH1 , 364 , 266 , 10 ms 912 us 
+data/d-10-09.txt , Forward Check Solver , VAH1 , 2209 , 1809 , 11 ms 386 us 
 true
-data/d-10-09.txt , Forward Check Solver , VAH3 , 125 , 53 , 8 ms 329 us 
+data/d-10-09.txt , Forward Check Solver , VAH3 , 2995 , 2521 , 15 ms 676 us 
 true
-data/d-10-09.txt , Forward Check Solver , VAH4 , 128 , 53 , 8 ms 726 us 
+data/d-10-09.txt , Forward Check Solver , VAH4 , 4105 , 3210 , 16 ms 468 us 
 true
-data/d-10-09.txt , Forward Check Solver , VAH2 , 86912 , 57340 , 138 ms 883 us 
+data/d-10-09.txt , Forward Check Solver , VAH2 , 43276 , 29871 , 53 ms 31 us 
 true
-data/d-10-09.txt , Forward Check Solver , VAH5 , 322933 , 187991 , 457 ms 678 us 
+data/d-10-09.txt , Forward Check Solver , VAH5 , 68152458 , 39058427 , 46 s 701 ms 
 true
-data/d-15-01.txt , Forward Check Solver , VAH1 , 529823 , 471511 , 837 ms 797 us 
+data/d-15-01.txt , Forward Check Solver , VAH1 , 881387 , 784977 , 1 s 188 ms 
 true
-data/d-15-01.txt , Forward Check Solver , VAH3 , 107449 , 96214 , 304 ms 799 us 
+data/d-15-01.txt , Forward Check Solver , VAH3 , 33325 , 29636 , 101 ms 499 us 
 true
-data/d-15-01.txt , Forward Check Solver , VAH4 , 1023837 , 914710 , 1 s 598 ms 
+data/d-15-01.txt , Forward Check Solver , VAH4 , 82517 , 69443 , 148 ms 215 us 
 true
-data/d-15-01.txt , Forward Check Solver , VAH2 , 656430889 , 444548678 , 10 min 58 s 
+data/d-15-01.txt , Forward Check Solver , VAH2 , 1214925571 , 855860420 , 13 min 17 s 
 true
 data/d-15-01.txt , 

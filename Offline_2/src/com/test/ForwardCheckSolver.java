@@ -68,8 +68,8 @@ public class ForwardCheckSolver {
         }
 
         Variable variable = heuristic.getNextVariables(variableHeuristic);
-        List<Integer> domain = heuristic.getDomainInOrderOfIncreasingConstraint(variable);
-//        List<Integer> domain = variable.domain();
+//        List<Integer> domain = heuristic.getDomainInOrderOfIncreasingConstraint(variable);
+        List<Integer> domain = variable.domain();
         for (int value : domain) {
             variable.setValue(value);
             HashSet <Variable> variables_to_remove = new HashSet<>();
