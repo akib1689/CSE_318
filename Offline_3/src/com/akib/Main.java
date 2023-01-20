@@ -25,7 +25,7 @@ public class Main {
         // find the average penalty
         double totalPenalty = 0;
         for (StudentEnrollment enrollment: enrollments){
-            totalPenalty += enrollment.getPenalty(PenaltyStrategy.LINEAR);
+            totalPenalty += enrollment.getPenalty(PenaltyStrategy.EXPONENTIAL);
         }
         double averagePenalty = totalPenalty/enrollments.size();
         System.out.println("Average penalty: " + averagePenalty);

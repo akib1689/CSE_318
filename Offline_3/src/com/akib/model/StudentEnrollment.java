@@ -29,17 +29,12 @@ public class StudentEnrollment {
     public double getPenalty(PenaltyStrategy penaltyStrategy){
         double penalty = 0;
         Collections.sort(enrolledCourse, Comparator.comparingInt(Course::getTimeSlot));
-        for (Course course1: enrolledCourse){
-            for (Course course2: enrolledCourse){
-                if (course1.equals(course2)){
-                    continue;
-                }
-
-                int gap = course1.getTimeSlot() - course2.getTimeSlot();
-
+        for (int i = 0; i < enrolledCourse.size(); i++) {
+            for (int j = i + 1; j < enrolledCourse.size(); j++) {
+                int gap = enrolledCourse.get(j).getTimeSlot() - enrolledCourse.get(i).getTimeSlot();
                 if (penaltyStrategy == PenaltyStrategy.LINEAR) {
                     penalty += getLinearPenalty(gap);
-                }else if (penaltyStrategy == PenaltyStrategy.EXPONENTIAL){
+                } else if (penaltyStrategy == PenaltyStrategy.EXPONENTIAL) {
                     penalty += getExponentialPenalty(gap);
                 }
             }
