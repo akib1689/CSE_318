@@ -5,9 +5,10 @@ import com.akib.model.StudentEnrollment;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOError;
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
@@ -17,8 +18,6 @@ public class Main {
         List<StudentEnrollment> enrollments = getStudentEnrollment(datasetName, courses);
         System.out.println(enrollments.size());
         addConflictingCourse(enrollments);
-
-
     }
 
 
