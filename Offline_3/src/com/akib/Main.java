@@ -3,8 +3,10 @@ package com.akib;
 import com.akib.model.Course;
 import com.akib.model.StudentEnrollment;
 
+import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,8 +18,27 @@ public class Main {
         String datasetName = "car-f-92";
         HashMap<String, Course> courses = takeInput(datasetName);
         List<StudentEnrollment> enrollments = getStudentEnrollment(datasetName, courses);
-        System.out.println(enrollments.size());
         addConflictingCourse(enrollments);
+        // solve the problem using the constructive heuristics
+        int totalSlots = ConstructiveHeuristicsSolver.solveAndReturnTotalSlots(Heuristics.LARGEST_DEGREE, courses);
+        System.out.println("Total Time slots required: "+totalSlots);
+        // find the average penalty
+        double totalPenalty = 0;
+        for (StudentEnrollment enrollment: enrollments){
+            totalPenalty += enrollment.getPenalty(PenaltyStrategy.LINEAR);
+        }
+        double averagePenalty = totalPenalty/enrollments.size();
+        System.out.println("Average penalty: " + averagePenalty);
+
+        try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("solution/output.txt"))){
+            for (Course course: courses.values()){
+                bufferedWriter.write(course.getCourseID()+" "+course.getTimeSlot());
+                bufferedWriter.newLine();
+                bufferedWriter.flush();
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 

@@ -15,8 +15,11 @@ public class Course {
 
     private HashSet<Course> conflictingCourse;
 
+    private int timeSlot;                           // the time slot assigned to this course
+
     public Course(String courseID, int numEnrollment) {
         this.courseID = courseID;
+        this.timeSlot = -1;                         // initially no time slot is assigned
         this.numEnrollment = numEnrollment;
         this.conflictingCourse = new HashSet<>();
     }
@@ -31,6 +34,18 @@ public class Course {
 
     public int getNumConflictingCourse(){
         return conflictingCourse.size();
+    }
+
+    public HashSet<Course> getConflictingCourse() {
+        return conflictingCourse;
+    }
+
+    public int getTimeSlot() {
+        return timeSlot;
+    }
+
+    public void setTimeSlot(int timeSlot) {
+        this.timeSlot = timeSlot;
     }
 
     @Override
