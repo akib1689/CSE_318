@@ -2,10 +2,7 @@ package com.akib;
 
 import com.akib.model.Course;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
+import java.util.*;
 
 public class ConstructiveHeuristicsSolver {
 
@@ -17,18 +14,13 @@ public class ConstructiveHeuristicsSolver {
      *                          (the number of colors in the graph coloring problem)
      */
     public static int solveAndReturnTotalSlots(Heuristics heuristics, HashMap<String, Course> courses){
-        switch (heuristics){
-            case LARGEST_DEGREE:
-                return solveLargestDegree(courses);
-            case LARGEST_ENROLLMENT:
-                return 0;
-            case SATURATION_DEGREE:
-                return 1;
-            case RANDOM:
-                return 2;
-            default:
-                return -1;
-        }
+        return switch (heuristics) {
+            case LARGEST_DEGREE -> solveLargestDegree(courses);
+            case LARGEST_ENROLLMENT -> solveLargestEnrollment(courses);
+            case SATURATION_DEGREE -> solveDSaturAlgo(courses);
+            case RANDOM -> solveRandom(courses);
+            default -> -1;
+        };
     }
 
     private static int solveLargestDegree(HashMap<String, Course> courses){
@@ -36,6 +28,91 @@ public class ConstructiveHeuristicsSolver {
         // sort the courses in descending order of their degree
         courseList.sort(Comparator.comparingInt(Course::getNumConflictingCourse).reversed());
         return solveForTimeTable(courseList);
+    }
+
+    private static int solveLargestEnrollment(HashMap<String, Course> courses) {
+        ArrayList<Course> courseList = new ArrayList<>(courses.values());
+        courseList.sort(Comparator.comparingInt(Course::getNumEnrollment).reversed());
+        return solveForTimeTable(courseList);
+    }
+
+    private static int solveRandom(HashMap<String, Course> courses) {
+        ArrayList<Course> courseList = new ArrayList<>(courses.values());
+        Collections.shuffle(courseList);
+
+        return solveForTimeTable(courseList);
+    }
+
+    /**
+     * Algo link can be found in wiki one implementation is found in geeks for geeks
+     * both link is given below
+     * (NOTE:The implementation is in C++)
+     * @Link: https://en.wikipedia.org/wiki/DSatur
+     * @Link: https://www.geeksforgeeks.org/dsatur-algorithm-for-graph-coloring/
+     */
+
+    private static int solveDSaturAlgo(HashMap<String, Course> courses){
+        ArrayList<Course> courseList = new ArrayList<>(courses.values());
+        courseList.sort(Comparator.comparingInt(Course::getNumConflictingCourse).reversed());
+
+        // Assign the vertex with the highest degree course time slot 0
+        courseList.get(0).setTimeSlot(0);
+
+
+        // keeps the total number of time slot assigned till now
+        int totalSlot = 1;                      // initialize the time slot to 1
+                                                // as 0 is already assigned
+        for (int i = 0; i < courseList.size(); i++) {
+            HashSet<Integer> tempCourseList;                        // keeps track of adj nodes' time slot of all the variable
+            HashSet<Integer> maxSaturationDegreeAdjList = null;     // keeps track of adj nodes' time slot of max saturation degree
+            int maxIndex = -1;                                      // index of the maximum degree
+
+
+            for (int j = 0; j < courseList.size(); j++) {
+                if (courseList.get(j).getTimeSlot() == -1){
+                    tempCourseList = new HashSet<>();
+
+                    for (Course course: courseList.get(j).getConflictingCourse()){
+                        if (course.getTimeSlot() != 1){
+                            // the course already assigned need to update
+                            tempCourseList.add(course.getTimeSlot());
+                        }
+                    }
+
+                    // now temp has all the vertices that is assigned
+                    // for max degree that is assigned
+                    if (maxSaturationDegreeAdjList == null){
+                        maxSaturationDegreeAdjList = tempCourseList;
+                        maxIndex = j;
+                    } else if (tempCourseList.size() > maxSaturationDegreeAdjList.size() ||
+                            (tempCourseList.size() == maxSaturationDegreeAdjList.size() &&
+                                    courseList.get(j).getNumConflictingCourse() > courseList.get(maxIndex).getNumConflictingCourse())) {
+                        maxSaturationDegreeAdjList = tempCourseList;
+                        maxIndex = j;
+                    }
+                }
+            }
+            int suggestedTimeSlot = 0;
+            if (maxIndex == -1) {
+                continue;
+            }
+            while (courseList.get(maxIndex).getTimeSlot() == -1){
+                // Such node exists
+
+
+                // ignore the warning below max saturation degree adj list can't be null
+                if (!maxSaturationDegreeAdjList.contains(suggestedTimeSlot)){
+                    courseList.get(maxIndex).setTimeSlot(suggestedTimeSlot);
+                    if (suggestedTimeSlot == totalSlot){
+                        totalSlot++;
+                    }
+                } else {
+                    suggestedTimeSlot++;
+                }
+            }
+        }
+
+        return totalSlot;
     }
 
     private static int solveForTimeTable(ArrayList<Course> courseList){

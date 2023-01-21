@@ -40,6 +40,10 @@ public class Course {
         return conflictingCourse;
     }
 
+    public int getNumEnrollment(){
+        return numEnrollment;
+    }
+
     public int getTimeSlot() {
         return timeSlot;
     }

@@ -20,7 +20,8 @@ public class Main {
         List<StudentEnrollment> enrollments = getStudentEnrollment(datasetName, courses);
         addConflictingCourse(enrollments);
         // solve the problem using the constructive heuristics
-        int totalSlots = ConstructiveHeuristicsSolver.solveAndReturnTotalSlots(Heuristics.LARGEST_DEGREE, courses);
+        int totalSlots = ConstructiveHeuristicsSolver.solveAndReturnTotalSlots(Heuristics.SATURATION_DEGREE , courses);
+
         System.out.println("Total Time slots required: "+totalSlots);
         // find the average penalty
         double totalPenalty = 0;
