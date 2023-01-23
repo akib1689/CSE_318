@@ -28,8 +28,18 @@ public class Main {
         for (StudentEnrollment enrollment: enrollments){
             totalPenalty += enrollment.getPenalty(PenaltyStrategy.EXPONENTIAL);
         }
-        double averagePenalty = totalPenalty/enrollments.size();
-        System.out.println("Average penalty: " + averagePenalty);
+        double initialAveragePenalty = totalPenalty/enrollments.size();
+        System.out.println("Average penalty after constructive heuristics: " + initialAveragePenalty);
+
+        // try to improve the solution using kempe chain
+        KempChain.runKempChainForIteration(courses, 1500);
+
+        totalPenalty = 0;
+        for (StudentEnrollment enrollment: enrollments){
+            totalPenalty += enrollment.getPenalty(PenaltyStrategy.EXPONENTIAL);
+        }
+        double afterKempChangeAveragePenalty = totalPenalty/enrollments.size();
+        System.out.println("Average penalty after kemp chain: " + afterKempChangeAveragePenalty);
 
         try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("solution/output.txt"))){
             for (Course course: courses.values()){
