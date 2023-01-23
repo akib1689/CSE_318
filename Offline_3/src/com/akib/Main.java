@@ -7,42 +7,38 @@ import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
+    private static List<StudentEnrollment> enrollments;
     public static void main(String[] args) {
         // take the input from the file
         String datasetName = "car-f-92";
         HashMap<String, Course> courses = takeInput(datasetName);
-        List<StudentEnrollment> enrollments = getStudentEnrollment(datasetName, courses);
+        enrollments = getStudentEnrollment(datasetName, courses);
         addConflictingCourse(enrollments);
         // solve the problem using the constructive heuristics
-        int totalSlots = ConstructiveHeuristicsSolver.solveAndReturnTotalSlots(Heuristics.SATURATION_DEGREE , courses);
+        int totalSlots = ConstructiveHeuristicsSolver.solveAndReturnTotalSlots(Heuristics.LARGEST_DEGREE , courses);
 
         System.out.println("Total Time slots required: "+totalSlots);
         // find the average penalty
-        double totalPenalty = 0;
-        for (StudentEnrollment enrollment: enrollments){
-            totalPenalty += enrollment.getPenalty(PenaltyStrategy.EXPONENTIAL);
-        }
-        double initialAveragePenalty = totalPenalty/enrollments.size();
+        double initialAveragePenalty = calculateAveragePenalty();
         System.out.println("Average penalty after constructive heuristics: " + initialAveragePenalty);
 
         // try to improve the solution using kempe chain
         KempChain.runKempChainForIteration(courses, 1500);
 
-        totalPenalty = 0;
-        for (StudentEnrollment enrollment: enrollments){
-            totalPenalty += enrollment.getPenalty(PenaltyStrategy.EXPONENTIAL);
-        }
-        double afterKempChangeAveragePenalty = totalPenalty/enrollments.size();
+        double afterKempChangeAveragePenalty = calculateAveragePenalty();
         System.out.println("Average penalty after kemp chain: " + afterKempChangeAveragePenalty);
 
+        // try to improve the solution using pair swap
+        PairSwapOperator.applyPairSwap(courses);
+        double afterPairSwapAveragePenalty = calculateAveragePenalty();
+        System.out.println("Average penalty after pair swap: " + afterPairSwapAveragePenalty);
+        ArrayList<Course> timeAscendingCourses = new ArrayList<>(courses.values());
+        timeAscendingCourses.sort(Comparator.comparingInt(Course::getTimeSlot));
         try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("solution/output.txt"))){
-            for (Course course: courses.values()){
+            for (Course course: timeAscendingCourses){
                 bufferedWriter.write(course.getCourseID()+" "+course.getTimeSlot());
                 bufferedWriter.newLine();
                 bufferedWriter.flush();
@@ -50,6 +46,14 @@ public class Main {
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public static double calculateAveragePenalty(){
+        double totalPenalty = 0;
+        for (StudentEnrollment enrollment: enrollments){
+            totalPenalty += enrollment.getPenalty(PenaltyStrategy.EXPONENTIAL);
+        }
+        return totalPenalty/enrollments.size();
     }
 
 

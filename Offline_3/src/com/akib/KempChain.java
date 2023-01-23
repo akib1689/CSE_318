@@ -53,7 +53,7 @@ public class KempChain {
         }
     }
 
-    private static void getKempChain(Course course,int timeSlot1, int timeSlot2, ArrayList<Course> visited, ArrayList<Course> chain){
+    public static void getKempChain(Course course,int timeSlot1, int timeSlot2, ArrayList<Course> visited, ArrayList<Course> chain){
         visited.add(course);
         chain.add(course);
 
