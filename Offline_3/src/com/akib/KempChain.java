@@ -7,12 +7,14 @@ import java.util.HashMap;
 
 public class KempChain {
     public static void runKempChainForIteration(HashMap<String, Course> courseMap, int iteration){
-        for (int i = 0; i < iteration; i++) {
-            interChange(courseMap);
+        int iterationCount = 0;
+        while (iterationCount < iteration){
+            if (interChange(courseMap))
+                iterationCount++;
         }
     }
 
-    private static void interChange(HashMap<String, Course> courseMap){
+    private static boolean interChange(HashMap<String, Course> courseMap){
         // generate a random number between 1 to courseMap.size()
         int random1 = (int) (Math.random() * courseMap.size()) + 1;
         // cast the random number to string with 4 digits initial digits are 0
@@ -23,7 +25,7 @@ public class KempChain {
 
         // if the course has no conflicting course then return
         if (course1.getConflictingCourse().size() == 0){
-            return;
+            return false;
         }
 
         // generate a random number between 0 to course1.getConflictingCourse().size()
@@ -51,6 +53,7 @@ public class KempChain {
                 course.setTimeSlot(timeSlot1);
             }
         }
+        return true;
     }
 
     public static void getKempChain(Course course,int timeSlot1, int timeSlot2, ArrayList<Course> visited, ArrayList<Course> chain){

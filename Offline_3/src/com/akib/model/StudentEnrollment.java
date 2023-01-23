@@ -26,6 +26,11 @@ public class StudentEnrollment {
         return this.enrolledCourse;
     }
 
+    @Override
+    public String toString() {
+        return enrolledCourse.toString();
+    }
+
     public double getPenalty(PenaltyStrategy penaltyStrategy){
         double penalty = 0;
         Collections.sort(enrolledCourse, Comparator.comparingInt(Course::getTimeSlot));

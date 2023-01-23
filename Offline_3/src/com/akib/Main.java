@@ -12,46 +12,18 @@ import java.util.*;
 public class Main {
     private static List<StudentEnrollment> enrollments;
     public static void main(String[] args) {
-        // take the input from the file
-        String datasetName = "car-f-92";
-        HashMap<String, Course> courses = takeInput(datasetName);
-        enrollments = getStudentEnrollment(datasetName, courses);
-        addConflictingCourse(enrollments);
-        // solve the problem using the constructive heuristics
-        int totalSlots = ConstructiveHeuristicsSolver.solveAndReturnTotalSlots(Heuristics.LARGEST_DEGREE , courses);
+        runDataset("car-s-91");
+        runDataset("car-f-92");
+        runDataset("kfu-s-93");
+        runDataset("tre-s-92");
+        runDataset("yor-f-83");
 
-        System.out.println("Total Time slots required: "+totalSlots);
-        // find the average penalty
-        double initialAveragePenalty = calculateAveragePenalty();
-        System.out.println("Average penalty after constructive heuristics: " + initialAveragePenalty);
-
-        // try to improve the solution using kempe chain
-        KempChain.runKempChainForIteration(courses, 1500);
-
-        double afterKempChangeAveragePenalty = calculateAveragePenalty();
-        System.out.println("Average penalty after kemp chain: " + afterKempChangeAveragePenalty);
-
-        // try to improve the solution using pair swap
-        PairSwapOperator.applyPairSwap(courses);
-        double afterPairSwapAveragePenalty = calculateAveragePenalty();
-        System.out.println("Average penalty after pair swap: " + afterPairSwapAveragePenalty);
-        ArrayList<Course> timeAscendingCourses = new ArrayList<>(courses.values());
-        timeAscendingCourses.sort(Comparator.comparingInt(Course::getTimeSlot));
-        try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("solution/output.txt"))){
-            for (Course course: timeAscendingCourses){
-                bufferedWriter.write(course.getCourseID()+" "+course.getTimeSlot());
-                bufferedWriter.newLine();
-                bufferedWriter.flush();
-            }
-        } catch (Exception e){
-            e.printStackTrace();
-        }
     }
 
     public static double calculateAveragePenalty(){
         double totalPenalty = 0;
         for (StudentEnrollment enrollment: enrollments){
-            totalPenalty += enrollment.getPenalty(PenaltyStrategy.EXPONENTIAL);
+            totalPenalty += enrollment.getPenalty(PenaltyStrategy.LINEAR);
         }
         return totalPenalty/enrollments.size();
     }
@@ -106,5 +78,46 @@ public class Main {
                 }
             }
         }
+    }
+
+    private static void runDataset(String datasetName) {
+        System.out.println("Running " + datasetName);
+        HashMap<String, Course> courses = takeInput(datasetName);
+        enrollments = getStudentEnrollment(datasetName, courses);
+        addConflictingCourse(enrollments);
+        // solve the problem using the constructive heuristics
+        int totalSlots = ConstructiveHeuristicsSolver.solveAndReturnTotalSlots(Heuristics.SATURATION_DEGREE , courses);
+
+        System.out.println("Total Time slots required: "+totalSlots);
+        // find the average penalty
+        double initialAveragePenalty = calculateAveragePenalty();
+        System.out.println("Average penalty after constructive heuristics: " + initialAveragePenalty);
+
+        // try to improve the solution using kemp chain
+        KempChain.runKempChainForIteration(courses, 50000);
+        double afterKempChangeAveragePenalty = calculateAveragePenalty();
+        System.out.println("Average penalty after kemp chain: " + afterKempChangeAveragePenalty);
+
+        // try to improve the solution using pair swap
+        for (int i = 0; i < 10; i++) {
+            PairSwapOperator.applyPairSwap(courses);
+        }
+        double afterPairSwapAveragePenalty = calculateAveragePenalty();
+        System.out.println("Average penalty after pair swap: " + afterPairSwapAveragePenalty);
+
+
+        ArrayList<Course> timeAscendingCourses = new ArrayList<>(courses.values());
+        timeAscendingCourses.sort(Comparator.comparingInt(Course::getTimeSlot));
+        try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("solution/" + datasetName + ".txt"))){
+            for (Course course: timeAscendingCourses){
+                bufferedWriter.write(course.getCourseID()+" "+course.getTimeSlot());
+                bufferedWriter.newLine();
+                bufferedWriter.flush();
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        System.out.println("==============Solution written to file===================");
     }
 }
