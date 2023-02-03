@@ -210,6 +210,113 @@ class MinesweeperAI():
         self.mark_safe(cell)
         self.moves_made.add(cell)
 
+        # get the neighboring cells
+        neighbors , count = self.get_neighbours(cell, count)
+        print(neighbors, count)
+
+
+        # add a new sentence to the AI's knowledge base
+        # the new sentence will have the neighboring cells and the count of mines in them
+        # as we have already marked the cell as safe the number of mines are same as the count
+        sentence = Sentence(neighbors, count)
+        self.knowledge.append(sentence)
+
+
+        new_knowledge = []
+        for k in self.knowledge:
+            if k == sentence:
+                continue
+            elif sentence.cells.issuperset(k.cells):
+               
+
+
+
+                # knowledge is a subset of sentence
+                print("knowledge is a subset of sentence")
+
+
+                # if the count of mine in knowledge is same as the count of mine in sentence
+                # then all the cells that are not in knowledge but in sentence are safe
+                set_difference = sentence.cells - k.cells
+                if k.count == sentence.count:
+                    print("some cells are safe")
+                    for sure_safe in set_difference:
+                        self.mark_safe(sure_safe)
+
+                # if the length of the set difference is same as the difference in the count
+                # then all the cells that are not in knowledge but in sentence are mines
+                if len(set_difference) == sentence.count - k.count:
+                    print("some cells are mines")
+                    for sure_mine in set_difference:
+                        self.mark_mine(sure_mine)
+                
+
+                # lastly we need to update the knowledge 
+                # add a new sentence to the AI's knowledge base
+                # in the set difference there are sentence.count - k.count mines
+                new_knowledge.append(Sentence(set_difference, sentence.count - k.count))
+            elif k.cells.issuperset(sentence.cells):
+                 # sentence is a subset of knowledge
+                print("sentence is a subset of knowledge")
+
+                # sure safe cells (See the logic above)
+                set_difference = k.cells - sentence.cells
+                if k.count == sentence.count:
+                    print("some cells are safe")
+                    for sure_safe in set_difference:
+                        self.mark_safe(sure_safe)
+                
+                # sure mine cells
+                if len(set_difference) == k.count - sentence.count:
+                    print("some cells are mines")
+                    for sure_mine in set_difference:
+                        self.mark_mine(sure_mine)
+                
+
+                # update the knowledge
+                new_knowledge.append(Sentence(set_difference, k.count - sentence.count))
+                
+            
+
+        self.knowledge.extend(new_knowledge)
+
+        # some duplicate sentences is added to the knowledge
+        # so we need to remove the duplicate sentences
+        unique_knowledge = []
+        for k in self.knowledge:
+            if k not in unique_knowledge:
+                unique_knowledge.append(k)
+        self.knowledge = unique_knowledge
+
+
+        # remove the sures from the knowledge
+        # if the sentence has no mines then it is not useful (known safe returns a set of cells)
+        # if the sentence has no safe cells then it is not useful (known mines returns a set of cells)
+
+        final_knowledge = []
+        for k in self.knowledge:
+            final_knowledge.append(k)
+            
+            if k.known_mines():
+                for mine in k.known_mines():
+                    self.mark_mine(mine)            # mark the mines in the sentence as mines
+                                                    # handles the case when the sentence has no mines
+                
+                final_knowledge.pop()               # remove the sentence from the final knowledge
+            
+            if k.known_safes():
+                for safe in k.known_safes():
+                    self.mark_safe(safe)            # mark the safes in the sentence as safes
+                                                    # handles the case when the sentence has no safe cells
+
+                final_knowledge.pop()               # remove the sentence from the final knowledge
+        
+
+        self.knowledge = final_knowledge
+
+
+
+
     def make_safe_move(self):
         """
         Returns a safe cell to choose on the Minesweeper board.
@@ -246,3 +353,17 @@ class MinesweeperAI():
             return None
         # return a random move
         return random.choice(tuple(moves))
+
+    def get_neighbours(self, cell, count):
+        i, j = cell
+        neighbours = set()
+
+        for x in range(i-1, i+2):
+            for y in range(j-1, j+2):
+                if (x, y) != cell and 0 <= x < self.height and 0 <= y < self.width and (x, y) not in self.safes and (x, y) not in self.mines:
+                    neighbours.add((x, y))
+                if (x, y) in self.mines:
+                    count -= 1
+        
+
+        return neighbours, count
