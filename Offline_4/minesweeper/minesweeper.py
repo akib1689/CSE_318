@@ -280,7 +280,7 @@ class MinesweeperAI():
                 set_difference = sentence.cells - k.cells
                 if k.count == sentence.count:
                     flag = False
-                    print("some cells are safe " + str(set_difference))
+                    # print("some cells are safe " + str(set_difference))
                     for sure_safe in set_difference:
                         self.mark_safe(sure_safe)
 
@@ -288,7 +288,7 @@ class MinesweeperAI():
                 # then all the cells that are not in knowledge but in sentence are mines
                 if len(set_difference) == sentence.count - k.count:
                     flag = False
-                    print("some cells are mines " + str(set_difference))
+                    # print("some cells are mines " + str(set_difference))
                     for sure_mine in set_difference:
                         self.mark_mine(sure_mine)
                 
@@ -309,14 +309,14 @@ class MinesweeperAI():
                 set_difference = k.cells - sentence.cells
                 if k.count == sentence.count:
                     flag = False
-                    print("sentence subset: some cells are safe " + str(set_difference))
+                    # print("sentence subset: some cells are safe " + str(set_difference))
                     for sure_safe in set_difference:
                         self.mark_safe(sure_safe)
                 
                 # sure mine cells
                 if len(set_difference) == k.count - sentence.count:
                     flag = False
-                    print("sentence subset: some cells are mines: " + str(set_difference))
+                    # print("sentence subset: some cells are mines: " + str(set_difference))
                     for sure_mine in set_difference:
                         self.mark_mine(sure_mine)
                 
