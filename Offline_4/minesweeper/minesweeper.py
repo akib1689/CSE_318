@@ -136,7 +136,8 @@ class Sentence():
             if c != cell:
                 newCells.add(c)         # this runs for len(self.cells)-1 times
             else:
-                self.count -= 1         # this runs once
+                self.count -= 1         # this runs for 1 times
+        
         self.cells = newCells
 
     def mark_safe(self, cell):
@@ -206,20 +207,26 @@ class MinesweeperAI():
             5) add any new sentences to the AI's knowledge base
                if they can be inferred from existing knowledge
         """
+        # print existing knowledge
+        # print("Existing knowledge:")
+        # for k in self.knowledge:
+        #     print("e" , k)
+
         # mark the cell as a safe and a move that has been made
         self.mark_safe(cell)
         self.moves_made.add(cell)
 
         # get the neighboring cells
         neighbors , count = self.get_neighbours(cell, count)
-        print(neighbors, count)
+        # print(neighbors, count)
 
 
         # add a new sentence to the AI's knowledge base
         # the new sentence will have the neighboring cells and the count of mines in them
         # as we have already marked the cell as safe the number of mines are same as the count
         sentence = Sentence(neighbors, count)
-        self.knowledge.append(sentence)
+        if len (sentence.cells) != 0:
+            self.knowledge.append(sentence)
 
 
         new_knowledge = []
@@ -227,17 +234,16 @@ class MinesweeperAI():
             if k == sentence:
                 continue
             elif sentence.cells.issuperset(k.cells):
-               
-
-
-
                 # knowledge is a subset of sentence
-
+                
+                # flag to check if we need to update the knowledge
+                flag = True
 
                 # if the count of mine in knowledge is same as the count of mine in sentence
                 # then all the cells that are not in knowledge but in sentence are safe
                 set_difference = sentence.cells - k.cells
                 if k.count == sentence.count:
+                    flag = False
                     print("some cells are safe " + str(set_difference))
                     for sure_safe in set_difference:
                         self.mark_safe(sure_safe)
@@ -245,34 +251,42 @@ class MinesweeperAI():
                 # if the length of the set difference is same as the difference in the count
                 # then all the cells that are not in knowledge but in sentence are mines
                 if len(set_difference) == sentence.count - k.count:
+                    flag = False
                     print("some cells are mines " + str(set_difference))
                     for sure_mine in set_difference:
                         self.mark_mine(sure_mine)
                 
 
-                # lastly we need to update the knowledge 
-                # add a new sentence to the AI's knowledge base
-                # in the set difference there are sentence.count - k.count mines
-                new_knowledge.append(Sentence(set_difference, sentence.count - k.count))
+                if flag:
+                    # lastly we need to update the knowledge 
+                    # add a new sentence to the AI's knowledge base
+                    # in the set difference there are sentence.count - k.count mines
+                    new_knowledge.append(Sentence(set_difference, sentence.count - k.count))
             elif k.cells.issuperset(sentence.cells):
-                 # sentence is a subset of knowledge
+                # sentence is a subset of knowledge
+
+
+                # flag to check if we need to update the knowledge
+                flag = True
 
                 # sure safe cells (See the logic above)
                 set_difference = k.cells - sentence.cells
                 if k.count == sentence.count:
-                    print("some cells are safe " + str(set_difference))
+                    flag = False
+                    print("sentence subset: some cells are safe " + str(set_difference))
                     for sure_safe in set_difference:
                         self.mark_safe(sure_safe)
                 
                 # sure mine cells
                 if len(set_difference) == k.count - sentence.count:
-                    print("some cells are mines: " + str(set_difference))
+                    flag = False
+                    print("sentence subset: some cells are mines: " + str(set_difference))
                     for sure_mine in set_difference:
                         self.mark_mine(sure_mine)
                 
-
-                # update the knowledge
-                new_knowledge.append(Sentence(set_difference, k.count - sentence.count))
+                if flag:
+                    # update the knowledge
+                    new_knowledge.append(Sentence(set_difference, k.count - sentence.count))
                 
             
 
@@ -311,6 +325,12 @@ class MinesweeperAI():
         
 
         self.knowledge = final_knowledge
+        print("length of safe: ", len(self.safes - self.moves_made))
+
+        # print the final knowledge
+        print("Final knowledge:")
+        for k in self.knowledge:
+            print("f", k)
 
 
 
@@ -326,12 +346,11 @@ class MinesweeperAI():
         """
 
         safe_moves = self.safes - self.moves_made
-        safe_moves = safe_moves - self.mines
 
         if not safe_moves:
             return None
         
-        print("safe moves: ", safe_moves)
+        # print("safe moves: ", safe_moves)
         return safe_moves.pop()
 
     def make_random_move(self):
