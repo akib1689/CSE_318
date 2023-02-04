@@ -62,18 +62,54 @@ class Minesweeper():
         # Keep count of nearby mines
         count = 0
 
+        # Unpack cell
+        i, j = cell
+        # only consider cells that are not diagonal to the cell 
+        # only i-1, i+1, j-1, j+1 are considered
+        # for j
+        if j == 0:
+            # check only the cells to the right
+            if self.board[i][j+1]:
+                count += 1
+        elif j == self.width - 1:
+            # check only the cells to the left
+            if self.board[i][j-1]:
+                count += 1
+        else:
+            # check the cells to the left and right
+            if self.board[i][j-1]:
+                count += 1
+            if self.board[i][j+1]:
+                count += 1
+        
+        # for i
+        if i == 0:
+            # check only the cells below
+            if self.board[i+1][j]:
+                count += 1
+        elif i == self.height - 1:
+            # check only the cells above
+            if self.board[i-1][j]:
+                count += 1
+        else:
+            # check the cells above and below
+            if self.board[i-1][j]:
+                count += 1
+            if self.board[i+1][j]:
+                count += 1
+
         # Loop over all cells within one row and column
-        for i in range(cell[0] - 1, cell[0] + 2):
-            for j in range(cell[1] - 1, cell[1] + 2):
+        # for i in range(cell[0] - 1, cell[0] + 2):
+        #     for j in range(cell[1] - 1, cell[1] + 2):
 
-                # Ignore the cell itself
-                if (i, j) == cell:
-                    continue
+        #         # Ignore the cell itself
+        #         if (i, j) == cell:
+        #             continue
 
-                # Update count if cell in bounds and is mine
-                if 0 <= i < self.height and 0 <= j < self.width:
-                    if self.board[i][j]:
-                        count += 1
+        #         # Update count if cell in bounds and is mine
+        #         if 0 <= i < self.height and 0 <= j < self.width:
+        #             if self.board[i][j]:
+        #                 count += 1
 
         return count
 
@@ -325,12 +361,12 @@ class MinesweeperAI():
         
 
         self.knowledge = final_knowledge
-        print("length of safe: ", len(self.safes - self.moves_made))
+        # print("length of safe: ", len(self.safes - self.moves_made))
 
         # print the final knowledge
-        print("Final knowledge:")
-        for k in self.knowledge:
-            print("f", k)
+        # print("Final knowledge:")
+        # for k in self.knowledge:
+        #     print("f", k)
 
 
 
@@ -378,6 +414,11 @@ class MinesweeperAI():
 
         for x in range(i-1, i+2):
             for y in range(j-1, j+2):
+                # if the cell is in diagonal then skip
+                # for becoming a diagonal the x and y both should be different than i and j
+                if x != i and y != j:
+                    continue
+
                 if (x, y) != cell and 0 <= x < self.height and 0 <= y < self.width and (x, y) not in self.safes and (x, y) not in self.mines:
                     neighbours.add((x, y))
                 if (x, y) in self.mines:
